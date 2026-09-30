@@ -10,7 +10,11 @@ export default async function handler(req, res) {
 
     switch (req.method) {
         case "GET":
-            return res.status(200).json("OK")
+            const data = [
+                {id: 1, name: "Gipsz Jakabné"},
+                {id: 2, name: "Oláh Dzsesszika"},
+            ]
+            return res.status(200).json({result: data})
             
     
         default:
