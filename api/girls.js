@@ -25,6 +25,8 @@ export default async function handler(req, res) {
     console.log("Someone called /api/girls endpoint :) Method: ", req.method)
 
     switch (req.method) {
+        case "OPTIONS":
+            return res.status(204).end()
         case "GET":
             conn = getCreatedConnection()
             const sql = `SELECT id, first_name, last_name, birth_at, virginity_lost_at, `
@@ -32,7 +34,7 @@ export default async function handler(req, res) {
                 +` FROM girls ORDER BY id LIMIT 100`
             console.log("sql: ", sql)
             conn.query(sql, (error, result, fields)=>{
-                //conn.destroy()
+                conn.destroy()
                 console.log("GET /api/girls result: ", result)
                 console.warn("GET /api/girls error: ", error)
                 return res.status(error ? 500 : 200).json({error, result})
