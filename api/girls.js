@@ -28,7 +28,7 @@ export default async function handler(req, res) {
                 +` allows_anal, performs_oral, min_dick_size, children, weight, waist, cup, url `
                 +` FROM girls ORDER BY id LIMIT 100`
             conn.query(sql, (error, result, fields)=>{
-                conn.destroy()
+                //conn.destroy()
                 console.log("GET /api/girls result: ", result)
                 console.warn("GET /api/girls error: ", error)
                 return res.status(error ? 500 : 200).json({error, result})
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
             
     
         default:
-            conn.destroy()
+            //conn.destroy()
             return res.status(405).json({error: "Method Not Allowed"})
     }
 
