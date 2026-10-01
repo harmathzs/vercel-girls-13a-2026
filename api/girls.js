@@ -7,23 +7,26 @@
  */
 import mysql from 'mysql2';
 
-export const connectionOptions = {
-    host: process.env.MYSQL_HOST,
-    port: process.env.MYSQL_PORT || 3306,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DB
-}
+export function getCreatedConnection() {
+    return {
+        host: process.env.MYSQL_HOST,
+        port: process.env.MYSQL_PORT || 3306,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DB
+    }
+} 
 
-export const getCreatedConnection = (connectionOptions) => mysql.createConnection(connectionOptions)
-export const conn = getCreatedConnection(connectionOptions)
+//export const getCreatedConnection = (connectionOptions) => mysql.createConnection(connectionOptions)
+//export const conn = getCreatedConnection(connectionOptions)
 
 export default async function handler(req, res) {
+    let conn = null
     console.log("Someone called /api/girls endpoint :) Method: ", req.method)
 
     switch (req.method) {
         case "GET":
-            
+            conn = getCreatedConnection()
             const sql = `SELECT id, first_name, last_name, birth_at, virginity_lost_at, `
                 +` allows_anal, performs_oral, min_dick_size, children, weight, waist, cup, url `
                 +` FROM girls ORDER BY id LIMIT 100`
