@@ -17,6 +17,8 @@ export function getCreatedConnection() {
 export default async function handler(req, res) {
     let conn = null
    
+    console.log("req.headers", req.headers)
+
     const allowedOrigins = new Set(["http://localhost"])
     const {origin} = req.headers
     if (origin && allowedOrigins.has(origin)) {
