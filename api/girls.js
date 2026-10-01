@@ -1,0 +1,57 @@
+/**
+ * Vercel Serverless Function
+ * /api/girls endpoint
+ */
+import mysql from 'mysql2'
+
+export function getCreatedConnection() {
+    return mysql.createConnection({
+        host: process.env.MYSQL_HOST || "localhost",
+        port: +process.env.MYSQL_PORT || 3306,
+        user: process.env.MYSQL_USER || "root",
+        password: process.env.MYSQL_PASSWORD || "",
+        database: process.env.MYSQL_DB || "girlsdb"
+    })
+}
+
+export default async function handler(req, res) {
+    let conn = null
+   
+    console.log("req.headers", req.headers)
+
+    const allowedOrigins = new Set(["http://localhost"])
+    const {origin} = req.headers
+    if (origin && allowedOrigins.has(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin)
+        res.setHeader("Vary", "Origin")
+        res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
+        res.setHeader(
+            "Access-Control-Allow-Headers",
+            "Content-Type, x-vercel-protection-bypass"
+        )
+    }
+        
+    switch (req.method) {
+        case "OPTIONS":
+            return res.status(204).end()
+
+        case "GET":
+            conn = getCreatedConnection()
+            conn.query(`SELECT id, first_name, last_name, birth_at, virginity_lost_at, `
+                +` allows_anal, performs_oral, min_dick_size, children, weight, waist, cup, url `
+                +` FROM girls ORDER BY id LIMIT 100`, (error, result, fields)=>{
+                conn.destroy()
+                if (error) {
+                    console.warn(error)
+                    return res.status(500).json({error: "Internal Server Error"})
+                } else {
+                    console.log(result)
+                    return res.status(200).json({result})
+                }
+            })
+            break
+
+        default:
+            return res.status(405).json({error: "Method Not Allowed"})
+    }
+}
