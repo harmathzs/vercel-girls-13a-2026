@@ -27,6 +27,7 @@ export default async function handler(req, res) {
             const sql = `SELECT id, first_name, last_name, birth_at, virginity_lost_at, `
                 +` allows_anal, performs_oral, min_dick_size, children, weight, waist, cup, url `
                 +` FROM girls ORDER BY id LIMIT 100`
+            console.log("sql: ", sql)
             conn.query(sql, (error, result, fields)=>{
                 //conn.destroy()
                 console.log("GET /api/girls result: ", result)
