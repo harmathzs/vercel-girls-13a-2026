@@ -35,7 +35,9 @@ export default async function handler(req, res) {
 
         case "GET":
             conn = getCreatedConnection()
-            conn.query("SELECT * FROM girls", (error, result, fields)=>{
+            conn.query(`SELECT id, first_name, last_name, birth_at, virginity_lost_at, `
+                +` allows_anal, performs_oral, min_dick_size, children, weight, waist, cup, url `
+                +` FROM girls ORDER BY id LIMIT 100`, (error, result, fields)=>{
                 conn.destroy()
                 if (error) {
                     console.warn(error)
